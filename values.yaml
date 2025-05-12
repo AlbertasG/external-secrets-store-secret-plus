@@ -1,12 +1,12 @@
 clusterSecretStore:
   enabled: false
-  config:
-    name: secretsmanager
-    provider:
-      aws:
-        service: SecretsManager
-        role: "arn:aws:iam:123456789:role/my-external-secrets-role"
-        region: us-east-1
+  # config:
+  #   name: secretsmanager
+  #   provider:
+  #     aws:
+  #       service: SecretsManager
+  #       role: "arn:aws:iam:123456789:role/my-external-secrets-role"
+  #       region: us-east-1
 
 clusterExternalSecret:
   enabled: false
