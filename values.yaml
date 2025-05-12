@@ -1,5 +1,5 @@
 clusterSecretStore:
-  enabled: true
+  enabled: false
   config:
     name: secretsmanager
     provider:
@@ -32,7 +32,7 @@ clusterExternalSecret:
     # #       property: password
 
 ExternalSecret:
-  enabled: true
+  enabled: false
 
   secrets:
     # - name: my-secret
