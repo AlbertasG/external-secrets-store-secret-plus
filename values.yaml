@@ -1,5 +1,6 @@
 clusterSecretStore:
   enabled: false
+  
   # config:
   #   name: secretsmanager
   #   provider:
@@ -11,7 +12,7 @@ clusterSecretStore:
 clusterExternalSecret:
   enabled: false
 
-  secrets:
+  #secrets:
     # - name: my-secret
     #   secretStoreRef:
     #     name: secretsmanager
@@ -31,26 +32,26 @@ clusterExternalSecret:
     # #       key: mycompany/prod/mySecret
     # #       property: password
 
-ExternalSecret:
+externalSecret:
   enabled: false
 
-  secrets:
-    # - name: my-secret
-    #   secretStoreRef:
-    #     name: secretsmanager
-    #     kind: ClusterSecretStore
-    #   data:
-    #   - secretKey: username
-    #     remoteRef:
-    #       key: mycompany/prod/mySecret
-    #       property: secret
-    # - name: my-secret-2
-    #   secretStoreRef:
-    #     name: secretsmanager
-    #     kind: ClusterSecretStore
-    #   data:
-    #   - secretKey: password
-    #     remoteRef:
-    #       key: mycompany/prod/mySecret
-    #       property: password
+  # secrets:
+  #   - name: my-secret
+  #     secretStoreRef:
+  #       name: secretsmanager
+  #       kind: ClusterSecretStore
+  #     data:
+  #     - secretKey: username
+  #       remoteRef:
+  #         key: mycompany/prod/mySecret
+  #         property: secret
+  #   - name: my-secret-2
+  #     secretStoreRef:
+  #       name: secretsmanager
+  #       kind: ClusterSecretStore
+  #     data:
+  #     - secretKey: password
+  #       remoteRef:
+  #         key: mycompany/prod/mySecret
+  #         property: password
     
