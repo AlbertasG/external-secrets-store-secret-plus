@@ -3,7 +3,7 @@ appVersion: v0.16.2
 name: external-secrets-store-secret-plus
 description: A chart to deploy one or more externalsecret CRD manifests
 type: application
-version: 0.8.0
+version: 0.9.0
 keywords:
   - externalsecret
 maintainers:
