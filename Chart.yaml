@@ -1,0 +1,12 @@
+apiVersion: v2
+appVersion: v0.16.2
+name: external-secrets-store-secret-plus
+description: A chart to deploy one or more externalsecret CRD manifests
+type: application
+version: 0.1.0
+keywords:
+  - externalsecret
+maintainers:
+  - name: AlbertasG
+    email: grinkevicius.albertas@gmail.com
+    
