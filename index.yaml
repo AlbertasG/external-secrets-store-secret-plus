@@ -3,6 +3,21 @@ entries:
   external-secrets-store-secret-plus:
   - apiVersion: v2
     appVersion: v0.16.2
+    created: "2026-06-05T08:39:07.354461103Z"
+    description: A chart to deploy one or more externalsecret CRD manifests
+    digest: 6a041712c2925fb2d37b28ba6f70f0c50f9411bb92567cdc7f27e8561ab91281
+    keywords:
+    - externalsecret
+    maintainers:
+    - email: grinkevicius.albertas@gmail.com
+      name: AlbertasG
+    name: external-secrets-store-secret-plus
+    type: application
+    urls:
+    - https://github.com/AlbertasG/external-secrets-store-secret-plus/releases/download/external-secrets-store-secret-plus-0.11.0/external-secrets-store-secret-plus-0.11.0.tgz
+    version: 0.11.0
+  - apiVersion: v2
+    appVersion: v0.16.2
     created: "2026-06-05T07:52:35.486576966Z"
     description: A chart to deploy one or more externalsecret CRD manifests
     digest: 537cdd7ea15d3c4ef918819202f9750725431a46690500a5fdff05051ff45147
@@ -106,4 +121,4 @@ entries:
     urls:
     - https://github.com/AlbertasG/external-secrets-store-secret-plus/releases/download/external-secrets-store-secret-plus-0.4.0/external-secrets-store-secret-plus-0.4.0.tgz
     version: 0.4.0
-generated: "2026-06-05T07:52:35.486608214Z"
+generated: "2026-06-05T08:39:07.354471659Z"
