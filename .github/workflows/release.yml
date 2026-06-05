@@ -93,4 +93,5 @@ jobs:
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          mkdir -p .cr-index
           cr index --owner "${{ github.repository_owner }}" --git-repo "${{ github.event.repository.name }}" --release-name-template "{{ .Name }}-{{ .Version }}" --index-path .cr-index/index.yaml --pages-index-path index.yaml --pages-branch gh-pages --push --token "$CR_TOKEN"
