@@ -1,0 +1,96 @@
+name: release-chart
+
+# This chart lives at the repo root (not under charts/<name>/), so the standard
+# helm/chart-releaser-action (which scans charts/*) can't pick it up. We drive the
+# chart-releaser CLI directly: package the root chart, publish a GitHub Release with
+# the .tgz asset, and update the Helm repo index on the gh-pages branch. This matches
+# how 0.4.0-0.9.0 were cut by hand (index urls point at GitHub Release download assets).
+#
+# Runs on a version bump to Chart.yaml on main. Also dispatchable from the Actions tab
+# to publish the current main version on demand. If the version's tag already exists the
+# job is a no-op, so re-runs and non-version Chart.yaml edits are safe.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Chart.yaml
+      - values.yaml
+      - templates/**
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-chart
+  cancel-in-progress: false
+
+env:
+  CR_VERSION: v1.6.1
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read chart name and version
+        id: chart
+        run: |
+          name=$(awk '/^name:/{print $2; exit}' Chart.yaml)
+          version=$(awk '/^version:/{print $2; exit}' Chart.yaml)
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$name-$version" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if this version was already released
+        id: check
+        run: |
+          if git ls-remote --tags origin "refs/tags/${{ steps.chart.outputs.tag }}" | grep -q .; then
+            echo "Release ${{ steps.chart.outputs.tag }} already exists, nothing to do."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Helm
+        if: steps.check.outputs.release == 'true'
+        uses: azure/setup-helm@v4
+
+      - name: Install chart-releaser
+        if: steps.check.outputs.release == 'true'
+        run: |
+          curl -fsSL "https://github.com/helm/chart-releaser/releases/download/${CR_VERSION}/chart-releaser_${CR_VERSION#v}_linux_amd64.tar.gz" -o cr.tar.gz
+          tar -xzf cr.tar.gz cr
+          sudo install -m 0755 cr /usr/local/bin/cr
+          rm -f cr cr.tar.gz
+
+      - name: Configure git identity for the gh-pages push
+        if: steps.check.outputs.release == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Package chart
+        if: steps.check.outputs.release == 'true'
+        run: |
+          rm -rf .cr-release-packages
+          cr package .
+
+      - name: Create GitHub Release and upload chart asset
+        if: steps.check.outputs.release == 'true'
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cr upload --owner "${{ github.repository_owner }}" --git-repo "${{ github.event.repository.name }}" --commit "${{ github.sha }}" --release-name-template "{{ .Name }}-{{ .Version }}" --skip-existing --token "$CR_TOKEN"
+
+      - name: Update gh-pages Helm index
+        if: steps.check.outputs.release == 'true'
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cr index --owner "${{ github.repository_owner }}" --git-repo "${{ github.event.repository.name }}" --release-name-template "{{ .Name }}-{{ .Version }}" --index-path .cr-index/index.yaml --pages-index-path index.yaml --pages-branch gh-pages --push --token "$CR_TOKEN"
