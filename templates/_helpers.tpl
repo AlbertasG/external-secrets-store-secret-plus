@@ -7,7 +7,7 @@ values (e.g. decodingStrategy: Base64) is preserved.
 Call with the data list as the context, then nindent to the caller's level.
 */}}
 {{- define "external-secrets-store-secret-plus.data" -}}
-{{- $defaults := dict "conversionStrategy" "Default" "decodingStrategy" "None" "metadataPolicy" "None" -}}
+{{- $defaults := dict "conversionStrategy" "Default" "decodingStrategy" "None" "metadataPolicy" "None" "nullBytePolicy" "Ignore" -}}
 {{- $out := list -}}
 {{- range $d := . -}}
 {{- $entry := deepCopy $d -}}
@@ -24,7 +24,7 @@ Same as above for a .dataFrom list: fills the default fields on each entry's
 extract block. find / rewrite / sourceRef pass through untouched.
 */}}
 {{- define "external-secrets-store-secret-plus.dataFrom" -}}
-{{- $defaults := dict "conversionStrategy" "Default" "decodingStrategy" "None" "metadataPolicy" "None" -}}
+{{- $defaults := dict "conversionStrategy" "Default" "decodingStrategy" "None" "metadataPolicy" "None" "nullBytePolicy" "Ignore" -}}
 {{- $out := list -}}
 {{- range $f := . -}}
 {{- $entry := deepCopy $f -}}
